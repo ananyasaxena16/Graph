@@ -1,0 +1,62 @@
+import java.lang.reflect.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        Edge(int src, int nbr){
+            this.src=src;
+            this.nbr=nbr;
+        }
+    }
+
+    public static boolean checkDFSDirected(ArrayList<Edge>[] graph, int n){
+        boolean visited[] = new boolean[n+1];
+        boolean dfsvisited[] = new boolean[n+1]; //if this call is inhibited
+        for(int i = 1; i<=n; i++)
+        {
+            if(!visited[i]){
+                if(checkCycle(visited, dfsvisited, i, graph)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean checkCycle(boolean[] visited, boolean[] dfsvisited, int i, ArrayList<Edge>[] graph){
+        visited[i] = true;
+        dfsvisited[i] = true;
+        for(Edge e: graph[i]){
+            if(!visited[e.nbr]){
+                if(checkCycle(visited, dfsvisited, e.nbr, graph))return true;
+            }else if(dfsvisited[e.nbr]==true){
+                return true;
+            }
+        }
+        dfsvisited[i]=false;
+        return false;
+    }
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n+1];
+        for(int i = 1; i<=n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            graph[a].add(new Edge(a, b));
+           
+
+        }
+
+        System.out.println(checkDFSDirected(graph, n)); //Cycle check with DFS
+
+
+
+    }
+
+}
