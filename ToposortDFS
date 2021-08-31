@@ -1,0 +1,65 @@
+import java.lang.reflect.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        Edge(int src, int nbr){
+            this.src=src;
+            this.nbr=nbr;
+        }
+    }
+    public static Stack<Integer> st = new Stack<>();
+
+    public static void ToposortDFS(ArrayList<Edge>[] graph, int n){
+        boolean visited[] = new boolean[n];
+
+        for(int i = 0; i<n; i++)
+        {
+            if(!visited[i]){
+                toposort(visited, i, graph);
+
+            }
+        }
+
+    }
+    public static void toposort(boolean[] visited, int i, ArrayList<Edge>[] graph){
+        visited[i] = true;
+
+        for(Edge e: graph[i]){
+            if(!visited[e.nbr]){
+                toposort(visited, e.nbr, graph);
+            }
+
+        }
+        st.push(i);
+
+    }
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for(int i = 0; i<n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            graph[a].add(new Edge(a, b));
+           // graph[b].add(new Edge(b, a));
+
+        }
+
+        ToposortDFS(graph, n);
+        while(st.size()>0)
+        {
+            System.out.println(st.pop());
+        }
+
+
+
+    }
+
+}
