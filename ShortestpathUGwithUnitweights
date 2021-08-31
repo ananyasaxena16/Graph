@@ -1,0 +1,71 @@
+import java.sql.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        Edge(int src, int nbr){
+            this.src=src;
+            this.nbr=nbr;
+        }
+    }
+
+
+    public static void  ShortPathinUGwithUNIT(ArrayList<Edge>[] graph, int n){
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+
+        Queue<Integer> q = new ArrayDeque<>();
+        dist[0] = 0;
+        q.add(0);
+
+        while(q.size()>0){
+            int t = q.remove();
+
+
+            for(Edge e:graph[t]){
+                int d = dist[t]+1;
+
+                if(d<dist[e.nbr]){
+                    dist[e.nbr] = d;
+                    q.add(e.nbr);
+                }
+
+
+            }
+        }
+        for(int i = 0; i<n; i++)
+        {
+            System.out.print(dist[i]+" ");
+        }
+
+
+
+    }
+
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for(int i = 0; i<n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            graph[a].add(new Edge(a, b));
+            graph[b].add(new Edge(b, a));
+
+        }
+
+        ShortPathinUGwithUNIT(graph, n);
+
+
+
+
+    }
+
+}
