@@ -1,0 +1,71 @@
+import java.lang.reflect.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        Edge(int src, int nbr){
+            this.src=src;
+            this.nbr=nbr;
+        }
+    }
+    public static ArrayList<Integer> al = new ArrayList<>();
+
+    public static void ToposortBFS(ArrayList<Edge>[] graph, int n){
+        int indegree[] = new int[n];
+
+        for(int i = 0; i<n; i++)
+        {
+            for(Edge e: graph[i]){
+                indegree[e.nbr]++;
+
+            }
+        }
+        Queue<Integer> q = new ArrayDeque<>();
+        for(int i = 0; i<n; i++)
+        {
+            if(indegree[i]==0){
+                q.add(i);
+            }
+        }
+        while(q.size()>0){
+            int t = q.remove();
+            al.add(t);
+            for(Edge e:graph[t]){
+                indegree[e.nbr]--;
+                if(indegree[e.nbr]==0){
+                    q.add(e.nbr);
+                    indegree[e.nbr] = -1;
+                }
+            }
+        }
+        System.out.println(al);
+
+
+    }
+
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for(int i = 0; i<n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            graph[a].add(new Edge(a, b));
+           // graph[b].add(new Edge(b, a));
+
+        }
+
+        ToposortBFS(graph, n);
+
+
+
+
+    }
+
+}
