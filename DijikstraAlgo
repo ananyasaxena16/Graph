@@ -1,0 +1,72 @@
+//for undirected graph shortest path with weights that aren't unit
+import java.sql.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        int weight;
+        Edge(int src, int nbr, int weight){
+            this.src=src;
+            this.nbr=nbr;
+            this.weight=weight;
+        }
+    }
+
+    public static class Pair implements Comparable<Pair>{
+        int w;
+        int node;
+        Pair(int w, int node){
+            this.w = w;
+            this.node = node;
+        }
+        @Override
+        public int compareTo(Pair o) {
+            return w - o.w;
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n+1];
+        for(int i = 1; i<=n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            int c = scn.nextInt();
+            graph[a].add(new Edge(a, b, c));
+            graph[b].add(new Edge(b, a, c));
+
+        }
+        int src= scn.nextInt();
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        int[] minpath = new int[n+1];
+        Arrays.fill(minpath, Integer.MAX_VALUE);
+        minpath[src] = 0;
+        pq.add(new Pair(minpath[src], src));
+
+        while(pq.size()>0){
+            Pair p = pq.remove();
+            int t = p.node;
+            for(Edge e: graph[t]){
+                int dist = p.w;
+                dist+=e.weight;
+                if(dist<minpath[e.nbr]){
+                    minpath[e.nbr] = dist;
+                    pq.add(new Pair(minpath[e.nbr], e.nbr));
+                }
+            }
+        }
+        for(int i = 1; i<=n; i++){
+            System.out.println(minpath[i]);
+        }
+
+
+    }
+
+}
