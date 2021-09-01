@@ -1,0 +1,78 @@
+import java.sql.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        int weight;
+        Edge(int src, int nbr, int weight){
+            this.src=src;
+            this.nbr=nbr;
+            this.weight=weight;
+        }
+    }
+
+    public static class Pair implements Comparable<Pair>{
+        int w;
+        int node;
+        Pair(int w, int node){
+            this.w = w;
+            this.node = node;
+        }
+        @Override
+        public int compareTo(Pair o) {
+            return w - o.w;
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for(int i = 0; i<n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            int c = scn.nextInt();
+            graph[a].add(new Edge(a, b, c));
+            graph[b].add(new Edge(b, a, c));
+
+        }
+        int src= scn.nextInt();
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        int key[] = new int[n];
+        boolean mst[] = new boolean[n];
+        int[] parent = new int[n];
+
+        Arrays.fill(key, Integer.MAX_VALUE);
+        Arrays.fill(mst, false);
+        Arrays.fill(parent, -1);
+
+        key[0] = 0;
+        pq.add(new Pair(key[0], 0));
+        for(int i = 0; i<n-1; i++){
+            int min = pq.remove().node;
+            mst[min] = true;
+            for(Edge e: graph[min]){
+                if(mst[e.nbr]==false && e.weight<key[e.nbr]){
+                    parent[e.nbr] = min;
+                    key[e.nbr] = e.weight;
+                    pq.add(new Pair(key[e.nbr], e.nbr));
+                }
+            }
+
+        }
+        for(int i = 1; i<n; i++){
+            System.out.println(parent[i]+"-"+i);
+        }
+
+
+
+
+    }
+
+}
