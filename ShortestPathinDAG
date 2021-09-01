@@ -1,0 +1,95 @@
+import java.sql.Array;
+import java.util.*;
+public class CheckCycleByBFS {
+    public static class Edge{
+        int src;
+        int nbr;
+        int weight;
+        Edge(int src, int nbr, int weight){
+            this.src=src;
+            this.nbr=nbr;
+            this.weight=weight;
+        }
+    }
+
+    public static Stack<Integer> st = new Stack<>();
+
+    public static void  ShortPathinDAG(ArrayList<Edge>[] graph, int n){
+
+
+
+
+
+       boolean visited[] = new boolean[n];
+
+       for(int i = 0; i<n; i++)
+       {
+           if(!visited[i]){
+               DAGtopo(graph, i, visited);
+           }
+
+       }
+
+    }
+    public static void DAGtopo(ArrayList<Edge>[] graph, int i, boolean visited[]){
+        visited[i] = true;
+
+        for(Edge e: graph[i]){
+            if(!visited[e.nbr]){
+                DAGtopo(graph, e.nbr, visited);
+            }
+
+        }
+        st.push(i);
+
+
+    }
+
+    public static void main(String[] args){
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int m = scn.nextInt();
+        ArrayList<Edge>[] graph = new ArrayList[n];
+        for(int i = 0; i<n; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int i = 0; i<m; i++)
+        {
+            int a = scn.nextInt();
+            int b = scn.nextInt();
+            int c = scn.nextInt();
+            graph[a].add(new Edge(a, b, c));
+           // graph[b].add(new Edge(b, a));
+
+        }
+        int src= scn.nextInt();
+
+        ShortPathinDAG(graph, n);
+
+        int[] minpath = new int[n];
+        Arrays.fill(minpath, Integer.MAX_VALUE);
+        minpath[src] = 0;
+        while(st.size()>0)
+        {
+            int t = st.pop();
+            for(Edge e: graph[t]){
+                int dist = minpath[t];
+                dist += e.weight;
+                if(dist<minpath[e.nbr]){
+                    minpath[e.nbr] = dist;
+                }
+
+            }
+
+        }
+        for(int i = 0; i<n; i++)
+        {
+            System.out.println(minpath[i]);
+        }
+
+
+
+
+    }
+
+}
