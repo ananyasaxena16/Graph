@@ -1,0 +1,46 @@
+public class Solution {
+    /**
+     * @param grid: a list of lists of integers
+     * @return: return an integer, denote the number of distinct islands
+     */
+    public int numberofDistinctIslands(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int count = 0;
+        HashSet<String> hs = new HashSet<>();
+        for(int i = 0; i<n; i++)
+        {
+            for(int j = 0; j<m; j++)
+            {
+                if(grid[i][j] == 1){
+                    StringBuilder sb = new StringBuilder();
+                    dfs(grid, i, j, sb.append("x"));
+                    hs.add(sb.toString());
+
+                }
+            }
+        }
+        return hs.size();
+
+        // write your code here
+    }
+    public void dfs(int[][] grid, int i, int j, StringBuilder sb){
+        
+        grid[i][j]=2;//mark
+        if(i-1>=0 && grid[i-1][j]==1){
+            dfs(grid, i-1, j, sb.append("N"));
+        }
+        if(j+1<grid[0].length && grid[i][j+1]==1){
+            dfs(grid, i, j+1, sb.append("E"));
+        }
+        if(i+1<grid.length && grid[i+1][j]==1){
+            dfs(grid, i+1, j, sb.append("S"));
+        }
+        if(j-1>=0 && grid[i][j-1]==1){
+            dfs(grid, i, j-1, sb.append("W"));
+        }
+        sb.append("z");
+        
+        
+    }
+}
