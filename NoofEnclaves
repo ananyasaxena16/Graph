@@ -1,0 +1,38 @@
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        int count = 0;
+        for(int i = 0; i<grid.length; i++)
+        {
+            for(int j = 0; j<grid[0].length; j++)
+            {
+                if(grid[i][j]==1){
+                    int[] noof1 = new int[]{0};
+                    boolean[] isconnected = new boolean[]{false};
+                    dfs(grid, i, j, noof1, isconnected);
+                    if(!isconnected[0]){
+                        count+=noof1[0];
+                    }
+                }
+            }
+        }
+        return count;
+        
+    }
+    public int[][] dir = {{-1, 0}, {0, 1}, {1,0}, {0, -1}};
+    public void dfs(int[][] grid, int i, int j, int[] noof1, boolean[] isconnected){
+        if(i==0||j==0||i==grid.length-1||j==grid[0].length-1){
+            isconnected[0] = true;
+        }
+        noof1[0]++;
+        grid[i][j]=2;
+        for(int d = 0; d<4; d++){
+            int row = i+dir[d][0];
+            int col = j+dir[d][1];
+            if(row<0||col<0||row>=grid.length||col>=grid[0].length||grid[row][col]!=1){
+                continue;
+            }
+            dfs(grid,row,col, noof1, isconnected);
+        }
+        
+    }
+}
