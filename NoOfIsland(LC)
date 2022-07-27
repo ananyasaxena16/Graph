@@ -1,36 +1,36 @@
 class Solution {
     public int numIslands(char[][] grid) {
         int count = 0;
-        for(int i = 0; i<grid.length; i++)
+        int x = grid.length;
+        int y = grid[0].length;
+        for(int i = 0; i<x; i++)
         {
-            for(int j = 0; j<grid[0].length; j++)
+            for(int j = 0; j<y; j++)
             {
-                if(grid[i][j]=='1')//found an unvisited land i.e., an island
+                if(grid[i][j]=='1')
                 {
+                    graph(i, j, grid);
                     count++;
-                helper(grid,i, j); //visit and mark all the connected area(unvisited land);
                 }
             }
         }
-    return count; 
-        
+        return count;
+      
     }
-    
-    
-    static int dir[][] = {{-1, 0}, {0, +1}, {+1, 0}, {0,-1}};//offsets for north, east, sount & west
-    public void helper(char[][] grid, int r, int c){
-        grid[r][c] = '2'; //mark
-        for(int d = 0; d<4;d++)
+    public static int[][] dir = {{-1,0}, {0, 1}, {1, 0},{0, -1}};
+    public void graph(int i, int j, char[][] grid){
+        grid[i][j] = '2';
+        //logic
+        for(int x = 0; x<dir.length; x++)
         {
-            int rowdash = r+ dir[d][0];
-            int coldash = c+dir[d][1];
-            if(rowdash<0||coldash<0||rowdash>=grid.length||coldash>=grid[0].length||grid[rowdash][coldash]!='1'){
-                continue; //aage chalo
+            int nr = i+dir[x][0];
+            int nc = j+dir[x][1];
+            if(nr<0||nc<0||nr>grid.length-1||nc>grid[0].length-1||grid[nr][nc]!='1')
+            {
+                continue;
             }
-            helper(grid, rowdash, coldash);
-            
+            graph(nr, nc, grid);
         }
-        
         
     }
 }
